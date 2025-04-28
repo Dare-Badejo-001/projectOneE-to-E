@@ -1,6 +1,6 @@
 import sys 
 
-import logging
+#from src.logger import logging
 def error_message_detail(error, error_detail: sys):
     """
     This function takes an error and its details and returns a formatted string with the error message.
@@ -24,6 +24,7 @@ class CustomException(Exception):
         return self.error_message
     
 
+'''
 if __name__ == "__main__":
     try:
         1 / 0
@@ -34,4 +35,6 @@ if __name__ == "__main__":
         # The error message will include the file name, line number, and the original error message
         # The 'from e' syntax is used to chain exceptions, so the original exception is preserved
         # The __str__ method of the CustomException class will be called to get the formatted error message
-        # The error message will be printed to the console 
+        # The error message will be printed to the console  
+
+'''
