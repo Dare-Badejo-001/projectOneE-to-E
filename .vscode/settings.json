@@ -1,0 +1,108 @@
+{
+    "accessibility.signals.chatResponseReceived": {
+        "sound": "off"
+    },
+    "accessibility.signals.terminalQuickFix": {
+        "announcement": "off",
+        "sound": "off"
+    },
+    "accessibility.signals.voiceRecordingStarted": {
+        "sound": "off"
+    },
+    "accessibility.signals.voiceRecordingStopped": {
+        "sound": "off"
+    },
+    "accessibility.signals.terminalCommandSucceeded": {
+        "announcement": "off",
+        "sound": "off"
+    },
+    "accessibility.signals.terminalCommandFailed": {
+        "announcement": "off",
+        "sound": "off"
+    },
+    "accessibility.signals.terminalBell": {
+        "announcement": "off",
+        "sound": "off"
+    },
+    "accessibility.signals.taskCompleted": {
+        "announcement": "off",
+        "sound": "off"
+    },
+    "accessibility.signals.notebookCellFailed": {
+        "announcement": "off",
+        "sound": "off"
+    },
+    "accessibility.signals.notebookCellCompleted": {
+        "sound": "off",
+        "announcement": "off"
+    },
+    "accessibility.signals.lineHasWarning": {
+        "sound": "off",
+        "announcement": "off"
+    },
+    "accessibility.signals.lineHasInlineSuggestion": {
+        "sound": "off"
+    },
+    "accessibility.signals.lineHasFoldedArea": {
+        "announcement": "off",
+        "sound": "off"
+    },
+    "accessibility.signals.noInlayHints": {
+        "sound": "off",
+        "announcement": "off"
+    },
+    "accessibility.signals.lineHasError": {
+        "announcement": "off",
+        "sound": "off"
+    },
+    "accessibility.signals.lineHasBreakpoint": {
+        "announcement": "off",
+        "sound": "off"
+    },
+    "accessibility.signals.diffLineModified": {
+        "sound": "off"
+    },
+    "accessibility.signals.diffLineInserted": {
+        "sound": "off"
+    },
+    "accessibility.signals.codeActionTriggered": {
+        "sound": "off"
+    },
+    "accessibility.signals.codeActionApplied": {
+        "sound": "off"
+    },
+    "accessibility.signals.clear": {
+        "announcement": "off",
+        "sound": "off"
+    },
+    "accessibility.signals.chatRequestSent": {
+        "announcement": "off",
+        "sound": "off"
+    },
+    "accessibility.signals.chatEditModifiedFile": {
+        "sound": "off"
+    },
+    "accessibility.signals.diffLineDeleted": {
+        "sound": "off"
+    },
+    "accessibility.signals.onDebugBreak": {
+        "sound": "off",
+        "announcement": "off"
+    },
+    "accessibility.signals.positionHasError": {
+        "sound": "off",
+        "announcement": "off"
+    },
+    "accessibility.signals.positionHasWarning": {
+        "sound": "off",
+        "announcement": "off"
+    },
+    "accessibility.signals.progress": {
+        "sound": "off",
+        "announcement": "off"
+    },
+    "accessibility.signals.taskFailed": {
+        "sound": "off",
+        "announcement": "off"
+    }
+}
