@@ -11,6 +11,8 @@ from sklearn.ensemble import (
     GradientBoostingRegressor,
     RandomForestRegressor,
 )
+import numpy as np
+from sklearn.model_selection import GridSearchCV
 
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
@@ -39,17 +41,83 @@ class ModelTrainer:
             "CatBoostRegressor": CatBoostRegressor(verbose=0),
             "AdaBoostRegressor": AdaBoostRegressor(),
         }
+
+        self.params = {
+        "DecisionTreeRegressor": {
+            "criterion": ["squared_error", "friedman_mse", "absolute_error", "poisson"],
+            "splitter": ["best", "random"],
+            "max_depth": [None] + list(np.linspace(10, 30, 3, dtype=int)),    
+            "min_samples_split": list(np.linspace(2, 10, 3, dtype=int)),
+            "min_samples_leaf": list(np.linspace(1, 5, 3, dtype=int)),
+        },
+        "KNeighborsRegressor": {
+            "n_neighbors": list(np.linspace(3, 9, 4, dtype=int)),
+            "weights": ["uniform", "distance"],
+            "algorithm": ["auto", "ball_tree", "kd_tree", "brute"],
+            "leaf_size": list(np.linspace(10, 30, 3, dtype=int)),
+        },
+        "RandomForestRegressor": {
+            "n_estimators": list(np.logspace(1, 2.5, 3, dtype=int)),  # ~10, 32, 100
+            "criterion": ["squared_error", "absolute_error", "poisson"],
+            "max_depth": [None] + list(np.linspace(10, 30, 3, dtype=int)),
+            "min_samples_split": list(np.linspace(2, 10, 3, dtype=int)),
+            "min_samples_leaf": list(np.linspace(1, 4, 3, dtype=int)),
+        },
+        "GradientBoostingRegressor": {
+            "n_estimators": list(np.logspace(2, 2.3, 2, dtype=int)),  # 100, 200
+            "learning_rate": np.logspace(-2, -0.7, 3),  # 0.01, ~0.05, 0.2
+            "max_depth": list(np.linspace(3, 7, 3, dtype=int)),
+            "min_samples_split": list(np.linspace(2, 5, 2, dtype=int)),
+            "min_samples_leaf": list(np.linspace(1, 2, 2, dtype=int)),
+        },
+        "XGBRegressor": {
+            "n_estimators": list(np.logspace(2, 2.3, 2, dtype=int)),
+            "learning_rate": np.logspace(-2, -0.7, 3),
+            "max_depth": list(np.linspace(3, 7, 3, dtype=int)),
+            "min_samples_split": list(np.linspace(2, 5, 2, dtype=int)),
+            "min_samples_leaf": list(np.linspace(1, 2, 2, dtype=int)),
+        },
+        "CatBoostRegressor": {
+            "iterations": list(np.logspace(2, 2.3, 2, dtype=int)),
+            "learning_rate": np.logspace(-2, -0.7, 3),
+            "depth": list(np.linspace(3, 7, 3, dtype=int)),
+            "l2_leaf_reg": list(np.logspace(0, 1, 3, dtype=int)),  # 1, 3, 10
+        },
+        "AdaBoostRegressor": {
+            "n_estimators": list(np.logspace(1.7, 2, 2, dtype=int)),  # 50, 100
+            "learning_rate": np.logspace(-2, -0.7, 3),
+        },
+        "LinearRegression": {
+        # No hyperparameters to tune for base LinearRegression
+    },
+    }
     
     def evaluate_models(self, X_train, y_train, X_test, y_test):
         model_report = {}
         for model_name, model in self.models.items():
             try:
-                logging.info(f"Training {model_name}")
-                model.fit(X_train, y_train)
-                y_test_pred = model.predict(X_test)
+                logging.info(f"Training {model_name} with hyperparameter tuning and GridSearchCV")
+                param_grid = self.params[model_name]
+                grid_search = GridSearchCV(
+                    estimator=model,
+                    param_grid=param_grid,
+                    scoring="r2",
+                    cv=3,
+                    verbose=1,
+                    n_jobs=-1,
+                )
+                grid_search.fit(X_train, y_train)
+                best_model = grid_search.best_estimator_
+                logging.info(f"Best parameters for {model_name}: {grid_search.best_params_}")
+                logging.info(f"Best score for {model_name}: {grid_search.best_score_}")
+                logging.info("Training the best model on the entire training set")
+                best_model.fit(X_train, y_train)
+                logging.info("Predicting on the test set")
+                y_test_pred = best_model.predict(X_test)
+                logging.info("Calculating R2 score")
                 r2_square = r2_score(y_test, y_test_pred)
-                logging.info("Model trained successfully")
                 logging.info(f"R2 Score test data: {r2_square * 100:.2f}%")
+                logging.info("Model trained successfully")
                 model_report[model_name] = r2_square
             except Exception as e:
                 logging.error(f"Error occurred while training {model_name}: {e}")
