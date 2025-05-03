@@ -26,7 +26,9 @@ def run_git_commands(commit_message):
 if __name__ == "__main__":
     # Prompt the user for a commit message
     commit_message = input("Enter your commit message: ")
+    logging.info(f"User provided commit message: {commit_message}")
 
     # Run the git commands
     run_git_commands(commit_message)
     logging.info("Git commands executed successfully.")
+
