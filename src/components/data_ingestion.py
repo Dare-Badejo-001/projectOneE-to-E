@@ -12,6 +12,9 @@ from dataclasses import dataclass
 from src.components.data_transformation import DataTransformationConfig
 from src.components.data_transformation import DataTransformation
 
+from src.components.model_trainer import ModelTrainerConfig
+from src.components.model_trainer import ModelTrainer
+
 
 @dataclass
 class DataIngestionConfig:
@@ -60,9 +63,17 @@ class DataIngestion:
             raise CustomException(e, sys)
         
 if __name__ == "__main__":
+    logging.info('---- data ingestion started ----')
     data_ingestion = DataIngestion()
     train_data, test_data,_  = data_ingestion.initiate_data_ingestion()
-    
+    logging.info('---- data ingestion completed ----\n')
+    logging.info('---- data transformation started ----')
     data_transformation = DataTransformation()
-    data_transformation.initiate_data_transformation(train_data, test_data)
+    train_arr, test_arr, _, _ = data_transformation.initiate_data_transformation(train_data, test_data)
+    logging.info('---- data transformation completed ----\n')
+    logging.info('---- model trainer started ----')
+
+    model_trainer = ModelTrainer()
+    model_trainer.initiate_model_trainer(train_arr,test_arr)
+    logging.info('---- model trainer completed ----')
     

@@ -59,7 +59,7 @@ class DataTransformation:
                 steps=[
                 ('imputer', SimpleImputer(strategy='most_frequent')),
                 ('onehotencoder', OneHotEncoder(handle_unknown='ignore')),
-                ('scaler', StandardScaler())
+                ('scaler', StandardScaler(with_mean=False))
             ])
 
             logging.info("Categorical columns encoding completed successfully")
@@ -104,16 +104,26 @@ class DataTransformation:
 
             input_features_test_df = test_df.drop(columns=[target_column_name], axis=1)
             target_feature_test_df = test_df[target_column_name]
-
+            logging.info("Train and test dataframes split into input features and target feature successfully")
+            
+            
+            logging.info("Applying preprocessing object on training and testing dataframes")
+            preprocessing_obj.fit(input_features_train_df)
+            input_features_train_df = preprocessing_obj.transform(input_features_train_df)
+            input_features_test_df = preprocessing_obj.transform(input_features_test_df)
+            logging.info("Preprocessing object applied on training and testing dataframes successfully")
+            
             train_arr = np.c_[input_features_train_df, np.array(target_feature_train_df)]
             test_arr = np.c_[input_features_test_df, np.array(target_feature_test_df)]
-
-            logging.info("Saved preprocessing object")
+            logging.info("Train and test arrays created successfully")
+            
+            logging.info("Saving preprocessing object")
 
             save_object(  
                     file_path=self.data_transformation_config.preprocessor_obj_file_path,
                     obj=preprocessing_obj
                     )
+            logging.info("Preprocessing object saved successfully")
 
             return (
                     train_arr,
